@@ -7,6 +7,8 @@
 #
 # To enable this hook, rename this file to "pre-commit".
 
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
 	against=HEAD
@@ -45,15 +47,8 @@ EOF
 	exit 1
 fi
 
-# 确保编译数据库存在
-if [ ! -d build ]; then
-    mkdir build
-fi
-
-if [ ! -f build/compile_commands.json ]; then
-  cd build
-  cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 
-  cd ..
+if [ ! -f $REPO_ROOT/build/compile_commands.json ]; then
+    cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 fi
 
 cpp_and_cuda_files=$(git diff --cached --name-only --diff-filter=ACM "*.c" "*.cpp" "*.h" "*.hpp" "*.cc" "*.cu" "*.cuh")
@@ -62,7 +57,7 @@ for file in $cpp_and_cuda_files
 do
     clang-format -i "$file"
     git add "$file"
-    clang-tidy "$file" -p=build/compile_commands.json
+    clang-tidy "$file" -p=$REPO_ROOT/build/compile_commands.json
     if [ $? -ne 0 ]; then
         echo "clang-tidy failed on $file. Aborting commit."
         exit 1
