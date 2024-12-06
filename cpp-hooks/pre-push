@@ -50,8 +50,14 @@ do
 	fi
 done
 
-rm build/CMakeCache.txt
-cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+if [ -f CMakeLists.txt ]; then
+    rm build/CMakeCache.txt
+    cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+elif [ -f xmake.lua ]; then
+    xmake project -k compile_commands ./build/
+else
+    echo "Unsupported building system."
+fi
 
 # 获取所有要推送的文件
 # 这里我们假设推送的修改会涉及 .cpp, .h, .hpp, .cc 文件
