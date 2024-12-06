@@ -1,4 +1,0 @@
-Checks:          '-*,google-*,-google-runtime-references'
-WarningsAsErrors: ''
-HeaderFilterRegex: '.*'
-FormatStyle:     Google
