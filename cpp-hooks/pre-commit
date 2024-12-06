@@ -47,9 +47,6 @@ EOF
 	exit 1
 fi
 
-rm build/CMakeCache.txt
-cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
 # 获取修改过的 C++/CUDA 文件
 cpp_files=$(git diff --cached --name-only --diff-filter=ACM "*.cpp" "*.h" "*.hpp" "*.cc")
 
