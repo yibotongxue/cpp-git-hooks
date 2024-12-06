@@ -47,19 +47,25 @@ EOF
 	exit 1
 fi
 
-if [ ! -f $REPO_ROOT/build/compile_commands.json ]; then
-    cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-fi
+rm build/CMakeCache.txt
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-cpp_and_cuda_files=$(git diff --cached --name-only --diff-filter=ACM "*.cpp" "*.h" "*.hpp" "*.cc")
+# 获取修改过的 C++/CUDA 文件
+cpp_files=$(git diff --cached --name-only --diff-filter=ACM "*.cpp" "*.h" "*.hpp" "*.cc")
 
-for file in $cpp_and_cuda_files
+# 遍历每个文件
+for file in $cpp_files
 do
+    # 使用 clang-format 格式化文件
     clang-format -i "$file"
     git add "$file"
-    clang-tidy "$file" -p=$REPO_ROOT/build/compile_commands.json -fix
+
+    # 使用 cpplint 进行代码检查
+    cpplint "$file"
+    
+    # 检查 cpplint 的返回值，如果有错误则退出并阻止提交
     if [ $? -ne 0 ]; then
-        echo "clang-tidy failed on $file. Aborting commit."
+        echo "cpplint found issues in $file. Aborting commit."
         exit 1
     fi
 done
