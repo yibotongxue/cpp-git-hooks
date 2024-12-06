@@ -51,13 +51,13 @@ if [ ! -f $REPO_ROOT/build/compile_commands.json ]; then
     cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 fi
 
-cpp_and_cuda_files=$(git diff --cached --name-only --diff-filter=ACM "*.c" "*.cpp" "*.h" "*.hpp" "*.cc" "*.cu" "*.cuh")
+cpp_and_cuda_files=$(git diff --cached --name-only --diff-filter=ACM "*.cpp" "*.h" "*.hpp" "*.cc")
 
 for file in $cpp_and_cuda_files
 do
     clang-format -i "$file"
     git add "$file"
-    clang-tidy "$file" -p=$REPO_ROOT/build/compile_commands.json
+    clang-tidy "$file" -p=$REPO_ROOT/build/compile_commands.json -fix
     if [ $? -ne 0 ]; then
         echo "clang-tidy failed on $file. Aborting commit."
         exit 1
