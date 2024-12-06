@@ -1,22 +1,17 @@
-# cpp-git-hooks
-My git hooks for cpp.
+# My Git Hooks
 
-## Usage
+这是我的 `git` 钩子的托管仓库，包含一些常用的项目类型的 `git` 钩子，当前支持用 `CMake` 管理的 `C++` 项目。
 
-You can add this as a submodule for your project. Execuate the command on your root directory of your project
+## `CMake` 管理的 `C++` 项目
 
-```bash
-git submodule add https://github.com/yibotongxue/cpp-git-hooks.git hooks
-```
-
-Initialize and update it
+相关的脚本在 `cpp-hooks` 下，使用方法可以是将其中的脚本拷贝到 `.git/hooks/` 下使用，或者将其中的脚本下载到你喜欢的文件夹，比如项目根目录下的 `hooks` 文件夹，然后执行下面的命令
 
 ```bash
-git submodule update --init --recursive
+git config core.hooksPath ./hooks
 ```
 
-Then set the `core.hooksPath`
+## TODO
 
-```bash
-git config core.hooksPath ./hooks/hooks
-```
+- [ ] `XMake` 管理的 `C++` 项目
+- [ ] `CMake` 管理的 `Cuda` 项目
+- [ ] `Python` 项目
