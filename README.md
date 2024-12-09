@@ -21,8 +21,18 @@ git config core.hooksPath ./hooks
 git config core.hooksPath ./hooks
 ```
 
+## `Python` 项目
+
+相关的脚本在 `python` 下，使用方法可以是将其中的脚本拷贝到 `.git/hooks/` 下使用，或者将其中的脚本下载到你喜欢的文件夹，比如项目根目录下的 `hooks` 文件夹，然后执行下面的命令
+
+```bash
+git config core.hooksPath ./hooks
+```
+
 ## TODO
 
 - [x] `XMake` 管理的 `C++` 项目
 - [x] `Cuda` 项目
-- [ ] `Python` 项目
+- [x] `Python` 项目
+- [ ] 修正 `pre-merge-commit` 钩子
+- [ ] 增加文档说明和配置文件
